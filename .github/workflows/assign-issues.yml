@@ -1,0 +1,22 @@
+name: Notify Code Owners on New Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Assign issue to Code Owners
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const codeowners = ['codeowner1', 'codeowner2'];
+          const issue_number = context.payload.issue.number;
+          await github.issues.addAssignees({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issue_number,
+            assignees: codeowners
+          });
